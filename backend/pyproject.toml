@@ -1,0 +1,11 @@
+[project]
+name = "h3-local-studio-backend"
+version = "0.1.0"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+asyncio_mode = "auto"
+

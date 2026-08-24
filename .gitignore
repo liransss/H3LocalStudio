@@ -1,0 +1,53 @@
+# JavaScript / Vite
+node_modules/
+dist/
+*.tsbuildinfo
+.vite/
+
+# Python
+backend/.venv/
+backend/__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Rust / Tauri
+src-tauri/target/
+
+# Local configuration and runtime data
+.env
+backend/.env
+config.local.json
+*.db
+*.db-shm
+*.db-wal
+data/
+/models/
+inputs/
+outputs/
+projects/
+cache/
+workflows/user/
+thumbnails/
+temp/
+logs/
+runtime/
+
+# Generated and imported media
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.wav
+*.mp3
+*.m4a
+*.flac
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

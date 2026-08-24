@@ -1,0 +1,19 @@
+[package]
+name = "h3-local-studio"
+version = "0.1.0"
+description = "Local-first MiniMax H3 creative video studio"
+authors = ["H3 Local Studio"]
+edition = "2021"
+
+[lib]
+name = "h3_local_studio_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+

@@ -1,0 +1,246 @@
+{
+  "manifest_version": 3,
+  "validated_at": "2026-08-24T17:50:00+03:00",
+  "platform": {
+    "os": "Microsoft Windows 11 Pro",
+    "os_version": "10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 7 270K Plus",
+    "ram_total_mib": 32226,
+    "gpu": "NVIDIA GeForce RTX 5070 Ti",
+    "gpu_vram_mib": 16303,
+    "nvidia_driver": "610.62",
+    "ffmpeg": "8.1.2-full_build-www.gyan.dev"
+  },
+  "comfyui": {
+    "install_path": "F:\\AI\\H3LocalStudio\\runtime\\ComfyUI",
+    "repository": "https://github.com/Comfy-Org/ComfyUI.git",
+    "release": "v0.33.1",
+    "commit": "72865f4f27eaf5396f8f36370e0a2be3a9a090ee",
+    "requirements_sha256": "444a2cad75850cc1cac566a2eea8474c0e3e96b710e66e58e98633b9e78f6f09",
+    "pip_lock": "docs/comfyui-requirements-lock.txt",
+    "python": "3.12.10",
+    "packages": {
+      "torch": "2.12.1+cu130",
+      "torchvision": "0.27.1+cu130",
+      "torchaudio": "2.11.0+cu130",
+      "cuda_runtime": "13.0",
+      "numpy": "2.5.2",
+      "scipy": "1.16.3",
+      "av": "16.0.1",
+      "triton-windows": "3.7.1.post27"
+    },
+    "custom_nodes": {
+      "flashvsr": {
+        "repository": "https://github.com/naxci1/ComfyUI-FlashVSR_Stable.git",
+        "commit": "f7f55bae4c0e82b18b190d4b62a977995507c51c",
+        "license": "MIT"
+      }
+    },
+    "windows_smart_app_control": {
+      "enabled": true,
+      "policy_changed": false,
+      "compatibility_pins": { "scipy": "1.16.3", "av": "16.0.1" },
+      "reason": "Newer SciPy 1.18.1 and PyAV 18.1.0 native extensions were blocked by the active code-integrity policy; these requirement-compatible established wheels loaded successfully."
+    }
+  },
+  "generation_models": {
+    "manifest": "2026.08.24-ref2va.1",
+    "shared_bytes": 21500205855,
+    "fl2va": {
+      "total_bytes": 44426778471,
+      "family_specific_bytes": 22926572616,
+      "verified": true
+    },
+    "ref2va": {
+      "total_bytes": 44426778471,
+      "family_specific_bytes": 22926572616,
+      "new_download_bytes": 22926572616,
+      "diffusion_revision": "3f57e8291d2ef846f9a074b1b76d2767db434abe",
+      "turbo_lora_revision": "edc77b088b1cb17f00cc1a57f68f263e82f9cc1d",
+      "verified": true
+    }
+  },
+  "upscalers": {
+    "manifest": "2026.08.24-upscalers.1",
+    "flashvsr": {
+      "display_name": "FlashVSR v1.1 · Fast 1080p",
+      "repository": "JunhaoZhuang/FlashVSR-v1.1",
+      "revision": "27561b186ded3402d7c975f4fd722e2885b6135f",
+      "total_bytes": 6948393553,
+      "verified": true,
+      "files": [
+        { "path": "models/FlashVSR-v1.1/LQ_proj_in.ckpt", "bytes": 575694948, "sha256": "d6d011cdaaba6a52645086caa08fa04124e746f6ca568140a24007591142bfd2" },
+        { "path": "models/FlashVSR-v1.1/TCDecoder.ckpt", "bytes": 189018333, "sha256": "e224bdcf2f52745cbf4d393ff5374c2ba09e90285d5d19062d2bf63b915b6161" },
+        { "path": "models/FlashVSR-v1.1/Wan2.1_VAE.pth", "bytes": 507609880, "sha256": "38071ab59bd94681c686fa51d75a1968f64e470262043be31f7a094e442fd981" },
+        { "path": "models/FlashVSR-v1.1/diffusion_pytorch_model_streaming_dmd.safetensors", "bytes": 5676070392, "sha256": "bd28180edcf3446c028e32fc6b731a80bf7e4da2ab4caac3186b9499964d37be" }
+      ]
+    },
+    "seedvr2": {
+      "display_name": "SeedVR2 3B INT8 · Best Quality 1080p",
+      "repository": "Comfy-Org/SeedVR2",
+      "revision": "673340c8a66db62b84e4099def7d01d337ae12dc",
+      "total_bytes": 3959584518,
+      "verified": true,
+      "files": [
+        { "path": "models/diffusion_models/seedvr2_3b_int8_convrot.safetensors", "bytes": 3458259704, "sha256": "c3dec8bcc5916843a8a858572970597462e1f2dc598d6dfd818f6cd40f53a157" },
+        { "path": "models/vae/seedvr2_ema_vae_fp16.safetensors", "bytes": 501324814, "sha256": "20678548f420d98d26f11442d3528f8b8c94e57ee046ef93dbb7633da8612ca1" }
+      ]
+    }
+  },
+  "validation": {
+    "phase2_preview": {
+      "generation_id": "8b8fb12c-bb83-44b0-b059-2be4ccb5e46c",
+      "execution_seconds": 56.658,
+      "width": 736,
+      "height": 416,
+      "fps": 24,
+      "peak_vram_mib": 15279,
+      "peak_ram_used_mib": 30715
+    },
+    "phase2_native": {
+      "generation_id": "de734bae-0349-436e-8398-6783838402d2",
+      "execution_seconds": 219.426,
+      "width": 1344,
+      "height": 768,
+      "fps": 24,
+      "frames": 107,
+      "duration_seconds": 4.458333,
+      "peak_vram_mib": 13822,
+      "peak_ram_used_mib": 30886,
+      "sha256": "a69cd582b882568b98d2676fe1d35fc860149bd271f2a97c284b93a3f26df22d"
+    },
+    "flashvsr_1080p": {
+      "job_id": "ce1c885a-962f-48c4-9d16-5a3ebe5a5f75",
+      "execution_seconds": 758.399,
+      "provider_seconds": 757.126,
+      "width": 1920,
+      "height": 1080,
+      "fps": 24,
+      "frames": 107,
+      "duration_seconds": 4.458333,
+      "peak_vram_gib": 10.88,
+      "peak_ram_used_gib": 27.04,
+      "minimum_ram_free_gib": 4.43,
+      "ssim_to_lanczos": 0.930558,
+      "psnr_to_lanczos_db": 32.079198,
+      "sha256": "1955c651f0e4e7af961fdc42f4fcb429b8c9cb89c4e87f78518ca8d7f3b7d0f6"
+    },
+    "seedvr2_1080p": {
+      "job_id": "eaf92294-7135-4458-98d3-75f3cd4d7437",
+      "execution_seconds": 251.996,
+      "provider_seconds": 251.092,
+      "width": 1920,
+      "height": 1080,
+      "fps": 24,
+      "frames": 107,
+      "duration_seconds": 4.458008,
+      "peak_vram_gib": 14.16,
+      "peak_ram_used_gib": 30.45,
+      "minimum_ram_free_gib": 1.02,
+      "ssim_to_lanczos": 0.937372,
+      "psnr_to_lanczos_db": 31.970133,
+      "sha256": "98d7081f85619ab97c783f3d8ed4d47e6eb89e47c8b4d7708d9f8f2649fc5bd0"
+    },
+    "audio_packet_md5": "cc2f21aaf49a5f10bff8a44c14852f34",
+    "temporal_checks": {
+      "decoded_frames_each": 107,
+      "freezedetect_events": 0,
+      "blackdetect_events": 0
+    },
+    "active_upscale_cancel": {
+      "job_id": "53e88264-96e3-46ce-a766-36fb49abbd76",
+      "terminal_state": "cancelled",
+      "generation_state_after": "completed",
+      "original_preserved": true
+    },
+    "phase4_ref2va": {
+      "project_id": "5802a882-900a-415e-b176-fbd5ccb0e3e4",
+      "preview": {
+        "width": 736,
+        "height": 416,
+        "fps": 24,
+        "frames": 107,
+        "duration_seconds": 4.458333,
+        "video_codec": "h264",
+        "audio_codec": "aac",
+        "audio_sample_rate": 32000,
+        "audio_channels": 2
+      },
+      "tests": [
+        {
+          "name": "A_image_only",
+          "generation_id": "33d44b01-86ec-4c04-af85-5d0797900c83",
+          "references": { "image": 2, "video": 0, "audio": 0 },
+          "execution_seconds": 49.279,
+          "peak_vram_gib": 15.05,
+          "peak_ram_used_gib": 29.52,
+          "minimum_ram_free_gib": 1.95,
+          "size_bytes": 588230,
+          "sha256": "8ddcfc80af45cb69d4c16660094c5104ebc6224f16fb77b3fc9b949e67b8e085",
+          "audio_present": true
+        },
+        {
+          "name": "B_image_video",
+          "generation_id": "ff9ea6cc-96cb-465b-a118-12c165c84ed7",
+          "references": { "image": 1, "video": 1, "audio": 0, "paired_video_audio": 1 },
+          "execution_seconds": 143.787,
+          "peak_vram_gib": 15.14,
+          "peak_ram_used_gib": 29.90,
+          "minimum_ram_free_gib": 1.57,
+          "size_bytes": 642006,
+          "audio_present": true
+        },
+        {
+          "name": "C_image_audio",
+          "generation_id": "e53b6870-8dc6-423d-9d18-72a1a50b5a3f",
+          "references": { "image": 1, "video": 0, "audio": 1 },
+          "execution_seconds": 45.860,
+          "peak_vram_gib": 14.90,
+          "peak_ram_used_gib": 29.62,
+          "minimum_ram_free_gib": 1.85,
+          "size_bytes": 518418,
+          "audio_present": true
+        },
+        {
+          "name": "D_mixed_multimodal",
+          "generation_id": "5c397862-c44e-4a25-a1b2-fdfc46a6eac4",
+          "references": { "image": 2, "video": 1, "audio": 1, "paired_video_audio": 1 },
+          "execution_seconds": 165.737,
+          "peak_vram_gib": 15.14,
+          "peak_ram_used_gib": 29.87,
+          "minimum_ram_free_gib": 1.60,
+          "size_bytes": 573302,
+          "audio_present": true
+        }
+      ],
+      "active_cancel": {
+        "generation_id": "59514923-c765-4b1d-ae63-3dfcbc24515e",
+        "job_id": "245e1b74-164c-4b60-a10e-77975ef2e0bd",
+        "terminal_state": "cancelled",
+        "comfyui_queue_cleared": true,
+        "staging_removed": true
+      },
+      "post_cancel_recovery": {
+        "generation_id": "5fd7fa3f-a3dc-4b5b-baee-07864c032f41",
+        "execution_seconds": 44.779,
+        "status": "completed"
+      },
+      "seedvr2_compatibility": {
+        "source_generation_id": "33d44b01-86ec-4c04-af85-5d0797900c83",
+        "job_id": "cdfeb395-7174-43bb-bb9c-d991a12c6539",
+        "execution_seconds": 249.408,
+        "provider_seconds": 248.151,
+        "width": 1920,
+        "height": 1080,
+        "fps": 24,
+        "duration_seconds": 4.458008,
+        "size_bytes": 7724593,
+        "sha256": "93fc86668eba672486f4862721a89d4d1976e4880343e3473382791cb0c97998",
+        "peak_vram_gib": 13.19,
+        "peak_ram_used_gib": 25.12,
+        "minimum_ram_free_gib": 6.35,
+        "audio_present": true
+      }
+    }
+  }
+}
