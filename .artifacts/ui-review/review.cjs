@@ -1,0 +1,62 @@
+const { chromium } = require('./browser-tools/node_modules/playwright-core');
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+(async () => {
+  const browser = await chromium.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true });
+  const page = await browser.newPage({ viewport: { width: 1600, height: 1050 } });
+  const errors = []; page.on('response', r => { if (r.status() >= 400) console.log('HTTP', r.status(), r.url()); });
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text() + ' ' + JSON.stringify(m.location())); });
+  await page.goto('http://127.0.0.1:1420');
+  const health = await page.request.get('http://127.0.0.1:7331/api/health');
+  assert.equal((await health.json()).mock_mode, true);
+  await page.getByRole('button', { name: 'Create', exact: true }).click();
+  await page.getByRole('button', { name: 'Generate mock video', exact: true }).waitFor();
+  await page.screenshot({ path: '.artifacts/ui-review/after-create.png', fullPage: true });
+  await page.getByRole('button', { name: 'Generate mock video', exact: true }).click();
+  await page.getByRole('alert').filter({ hasText: 'Describe the video' }).waitFor();
+  const prompt = `UI validation: moonlight passes through a glass sculpture, slow camera orbit. ${Date.now()}`;
+  await page.getByLabel('Prompt', { exact: true }).fill(prompt);
+  await page.getByRole('button', { name: 'Advanced settings' }).click();
+  await page.getByRole('spinbutton', { name: 'Seed', exact: true }).fill('42');
+  await page.getByRole('button', { name: '4s', exact: true }).click();
+  await page.getByRole('button', { name: '9:16', exact: true }).click();
+  const responsePromise = page.waitForResponse(r => r.url().endsWith('/api/generations') && r.request().method() === 'POST');
+  await page.getByRole('button', { name: 'Generate mock video', exact: true }).click();
+  const accepted = await (await responsePromise).json();
+  assert.equal(accepted.generation.is_mock, true);
+  assert.equal(accepted.generation.parameters.aspect_ratio, '9:16');
+  await page.getByRole('button', { name: 'View result', exact: true }).waitFor({timeout: 90000});
+  await page.screenshot({ path: '.artifacts/ui-review/after-completed.png', fullPage: true });
+  await page.getByRole('button', { name: 'View result', exact: true }).click();
+  await page.getByRole('dialog').waitFor();
+  await page.waitForFunction(() => [...document.querySelectorAll('.result-player video')].some(v => v.readyState >= 2));
+  await page.screenshot({ path: '.artifacts/ui-review/after-result.png', fullPage: true });
+  await page.keyboard.press('Escape');
+  assert.equal(await page.getByRole('dialog').count(), 0);
+  await page.getByRole('button', { name: 'History', exact: true }).click();
+  await page.getByPlaceholder('Search prompts…').fill(prompt);
+  assert.equal(await page.locator('.video-card').count(), 1);
+  await page.reload();
+  await page.getByRole('button', { name: 'History', exact: true }).click();
+  await page.getByPlaceholder('Search prompts…').fill(prompt);
+  await page.locator('.video-card').waitFor();
+  await page.screenshot({ path: '.artifacts/ui-review/after-history.png', fullPage: true });
+  for (const name of ['Home', 'Projects', 'Models', 'Settings', 'Spaces']) {
+    await page.getByRole('button', { name, exact: true }).first().click();
+    await page.waitForTimeout(700);
+    await page.screenshot({ path: `.artifacts/ui-review/after-${name.toLowerCase()}.png`, fullPage: true });
+    assert.equal(await page.locator('vite-error-overlay').count(), 0);
+  }
+  await page.getByRole('button', { name: 'Create', exact: true }).click();
+  for (const width of [1280, 768, 390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.screenshot({ path: `.artifacts/ui-review/after-create-${width}.png`, fullPage: true });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
+    assert.equal(overflow, false, `Page overflow at ${width}`);
+  }
+  fs.writeFileSync('.artifacts/ui-review/results.json', JSON.stringify({ mockMode: true, generationId: accepted.generation.id, persisted: true, videoLoaded: true, responsiveWidths: [1280, 768, 390, 320], consoleErrors: errors }, null, 2));
+  await browser.close(); assert.deepEqual(errors, []);
+  await browser.close();
+  console.log('PASS: mock generation, progress, video playback, Escape, history persistence, seven screens, responsive widths, no console errors.');
+})().catch(e => { console.error(e); process.exit(1); });

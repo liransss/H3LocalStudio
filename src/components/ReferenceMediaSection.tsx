@@ -47,6 +47,8 @@ export function ReferenceMediaSection({ projectId, value, onChange }: ReferenceM
   const [library, setLibrary] = useState<ReferenceAsset[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const uploadLock = useRef(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const imageInput = useRef<HTMLInputElement>(null);
   const videoInput = useRef<HTMLInputElement>(null);
@@ -72,6 +74,7 @@ export function ReferenceMediaSection({ projectId, value, onChange }: ReferenceM
   };
 
   const addAsset = (asset: ReferenceAsset) => {
+    if (uploadLock.current) return;
     if (value.some((item) => item.asset_id === asset.id)) return;
     const message = validateAddition(asset.media_type);
     if (message) { setError(message); return; }
@@ -80,11 +83,13 @@ export function ReferenceMediaSection({ projectId, value, onChange }: ReferenceM
   };
 
   const uploadFiles = async (files: File[]) => {
-    if (!projectId || !files.length) return;
+    if (uploadLock.current || !files.length) return;
+    if (!projectId) { setError("Choose a project before adding references."); return; }
+    uploadLock.current = true;
     setUploading(true);
     setError(null);
+    const next = [...value];
     try {
-      const next = [...value];
       for (const file of files) {
         const mediaType = typeForFile(file);
         if (!mediaType) throw new Error(`${file.name} is not a supported image, video, or audio file.`);
@@ -98,10 +103,11 @@ export function ReferenceMediaSection({ projectId, value, onChange }: ReferenceM
         if (!next.some((item) => item.asset_id === asset.id)) next.push(selection(asset));
         setLibrary((current) => [asset, ...current.filter((item) => item.id !== asset.id)]);
       }
-      onChange(next);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Reference upload failed.");
     } finally {
+      onChange(next);
+      uploadLock.current = false;
       setUploading(false);
     }
   };
@@ -124,9 +130,12 @@ export function ReferenceMediaSection({ projectId, value, onChange }: ReferenceM
     <div className="reference-block">
       <div className="field-heading"><label>Reference media</label><span>{value.length} / 12 files</span></div>
       <div
-        className={`dropzone reference-dropzone${uploading ? " uploading" : ""}`}
+        className={`dropzone reference-dropzone${uploading ? " uploading" : ""}${dragActive ? " drag-active" : ""}`}
+        aria-busy={uploading}
+        onDragEnter={(event) => { event.preventDefault(); if (event.dataTransfer.types.includes("Files")) setDragActive(true); }}
+        onDragLeave={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setDragActive(false); }}
         onDragOver={(event) => event.preventDefault()}
-        onDrop={(event) => { event.preventDefault(); if (event.dataTransfer.files.length) void uploadFiles(Array.from(event.dataTransfer.files)); }}
+        onDrop={(event) => { event.preventDefault(); setDragActive(false); if (event.dataTransfer.files.length) void uploadFiles(Array.from(event.dataTransfer.files)); }}
       >
         <div className="drop-icons"><FileImage size={20} /><Film size={20} /><Music2 size={20} /></div>
         <strong>{uploading ? "Validating and importing locally…" : "Drop image, video, or audio references"}</strong>
