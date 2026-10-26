@@ -14,6 +14,7 @@ import type { Generation, GenerationRequest, Job, LocalSettings, Page, Project, 
 
 function App() {
   const [page, setPage] = useState<Page>("home");
+  const [creationRevision, setCreationRevision] = useState(0);
   const [status, setStatus] = useState<SystemStatus | null>(null);
   const [generations, setGenerations] = useState<Generation[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -101,7 +102,7 @@ function App() {
 
   const content = (() => {
     switch (page) {
-      case "create": return <CreatePage key={reuseGeneration?.id ?? `fresh-${defaultUpscaler}`} status={status} projects={projects} activeJob={activeJob} activeGeneration={activeGeneration} initial={reuseGeneration} defaultUpscaler={defaultUpscaler} onGenerate={generate} onCancel={cancel} onShowResult={setSelectedGeneration} />;
+      case "create": return <CreatePage key={reuseGeneration?.id ?? `fresh-${defaultUpscaler}-${creationRevision}`} status={status} projects={projects} generations={generations} activeJob={activeJob} activeGeneration={activeGeneration} initial={reuseGeneration} defaultUpscaler={defaultUpscaler} onGenerate={generate} onCancel={cancel} onShowResult={setSelectedGeneration} />;
       case "history": return <HistoryPage generations={generations} onOpen={setSelectedGeneration} />;
       case "projects": return <ProjectsPage projects={projects} generations={generations} onCreate={createProject} />;
       case "models": return <ModelsPage />;
@@ -112,7 +113,7 @@ function App() {
   })();
 
   return (
-    <Layout page={page} onNavigate={(next) => { setPage(next); if (next !== "create") setReuseGeneration(null); }} status={status}>
+    <Layout onNewCreation={() => { setReuseGeneration(null); setCreationRevision((value) => value + 1); setPage("create"); }} page={page} onNavigate={(next) => { setPage(next); if (next !== "create") setReuseGeneration(null); }} status={status}>
       {backendError && <div className="connection-error"><span>{backendError}</span><button onClick={() => { refreshStatus(); void refreshLibrary(); }}>Retry</button></div>}
       {content}
       {selectedGeneration && <ResultPanel generation={selectedGeneration} status={status} onClose={() => setSelectedGeneration(null)} onReuse={reuse} onUpscale={upscale} onDelete={deleteGeneration} onOpen={openGeneration} onModels={() => { setSelectedGeneration(null); setPage("models"); }} />}
